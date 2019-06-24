@@ -1,0 +1,52 @@
+before_script:
+  - export LANG=en_US.UTF-8
+  - export CI_DEBUG_TRACE=true
+
+stages:
+  - test
+  - release
+  - deploy
+
+.xcode-job-template: &xcode-job
+  artifacts:
+    when: always
+    paths:
+      - ./.build/release/fibs
+      - ./.build/release/libagentcore.dylib
+      - ./.build/release/libcpuplugin.dylib
+      - ./.build/release/libenvplugin.dylib
+      - ./.build/release/libhcapiplugin.dylib
+      - ./.build/release/libmemplugin.dylib
+  tags:
+    - vm-xcode10.2.1
+
+.release-appunite-job: &release-appunite-job
+  <<: *xcode-job
+  stage: release
+
+# test:
+#   <<: *xcode-job
+#   stage: test
+#   script:
+#     - make restore-cache
+#     - make bootstrap
+#     - swift test
+#     - make store-cache
+#   except:
+#     - /^no-test.*$/
+
+build:
+  stage: test
+  except:
+    - master
+  tags:
+    - vm-xcode10.2.1
+  script:
+    - make restore-cache bootstrap build-release store-cache
+
+release:
+  <<: *release-appunite-job
+  only:
+    - master
+  script:
+    - make restore-cache bootstrap build-release store-cache
