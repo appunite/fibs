@@ -1,5 +1,6 @@
 SHELL := /bin/bash
 SOURCERY = Pods/Sourcery/bin/sourcery
+APPUNITE-CACHE = ~/appunite-cache
 
 bootstrap:    ## Bootstrap Gems and CocoaPods and SPM Dependencies
 	@make generate-project
