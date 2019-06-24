@@ -37,7 +37,7 @@ restore-cache:	## store cache in aws
 	@$(APPUNITE-CACHE) restore --keys 'gems-{{ checksum "Gemfile.lock" }}'
 
 store-cache:	## restore cache from aws
-	@$(APPUNITE-CACHE) store --key 'pods-{{ checksum "Podfile.lock" }}'
+	@$(APPUNITE-CACHE) store --key 'pods-{{ checksum "Podfile.lock" }}' --paths 'Pods'
 	@$(APPUNITE-CACHE) store --key 'gems-{{ checksum "Gemfile.lock" }}' --paths 'vendor'
 
 help:    ## This help message
