@@ -31,8 +31,13 @@ public class Application {
         router.post("/mock", handler: { [routesRegistrator] request, response, next in
             var data = Data()
             _ = try request.read(into: &data)
-            let parsedRoute = try MockedRoute(data: data)
-            routesRegistrator.register(parsedRoute)
+            do {
+                let parsedRoute = try MockedRoute(data: data)
+                routesRegistrator.register(parsedRoute)
+            } catch let error {
+                response.statusCode = .badRequest
+                response.send(error.localizedDescription)
+            }
             try response.end()
             next()
         })

@@ -11,39 +11,45 @@ public protocol MockedRoutesRegistrator {
     func register(_ route: MockedRoute)
 }
 
-public struct MockedRoutesRegistratorImp: MockedRoutesRegistrator {
+public class MockedRoutesRegistratorImp: MockedRoutesRegistrator {
     private let router: Router
+    private var routes: [AnyHashable: MockedRoute] = [:]
     
     public init(router: Router) {
         self.router = router
     }
     
     public func register(_ route: MockedRoute) {
+        guard case .none = routes[AnyHashable(route)] else {
+            routes[AnyHashable(route)] = route
+            return
+        }
+        routes[AnyHashable(route)] = route
         switch route.method {
         case .get:
             router.get(
                 route.path,
-                handler: routerHandler(forRoute: route)
+                handler: routerHandler(forRouteHash: route)
             )
         case .post:
             router.post(
                 route.path,
-                handler: routerHandler(forRoute: route)
+                handler: routerHandler(forRouteHash: route)
             )
         case .put:
             router.put(
                 route.path,
-                handler: routerHandler(forRoute: route)
+                handler: routerHandler(forRouteHash: route)
             )
         case .delete:
             router.delete(
                 route.path,
-                handler: routerHandler(forRoute: route)
+                handler: routerHandler(forRouteHash: route)
             )
         case .patch:
             router.patch(
                 route.path,
-                handler: routerHandler(forRoute: route)
+                handler: routerHandler(forRouteHash: route)
             )
         default:
             fatalError(
@@ -53,9 +59,10 @@ public struct MockedRoutesRegistratorImp: MockedRoutesRegistrator {
     }
     
     private func routerHandler(
-        forRoute route: MockedRoute
+        forRouteHash routeHash: AnyHashable
         ) -> RouterHandler {
-        return { request, response, next in
+        return { [unowned self] request, response, next in
+            let route = self.routes[routeHash]!
             response.statusCode = route.statusCode
             route.headers?.forEach {
                 response.headers.append(
@@ -68,6 +75,8 @@ public struct MockedRoutesRegistratorImp: MockedRoutesRegistrator {
                 response.send(json: json)
             } else if let jsonArray = route.body as? [Any] {
                 response.send(json: jsonArray)
+            } else if let someBody = route.body {
+                response.send("\(someBody)")
             }
             
             try response.end()

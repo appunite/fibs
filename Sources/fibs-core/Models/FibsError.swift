@@ -11,6 +11,8 @@ struct FibsError: LocalizedError {
     enum Reason {
         case requiredParamMissing(name: String)
         case invalidParamType(expected: String)
+        case emptyBody
+        case invalidBodyFormat
     }
     
     let errorDescription: String
@@ -22,6 +24,10 @@ struct FibsError: LocalizedError {
             return "Invalid parameter passed, should be: \(expected)."
         case .requiredParamMissing(let name):
             return "Required parameter \"\(name)\" missing."
+        case .emptyBody:
+            return "Missing request body"
+        case .invalidBodyFormat:
+            return "Body is in incorrect format"
         }
     }
 }

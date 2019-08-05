@@ -8,7 +8,7 @@
 import Foundation
 import Kitura
 
-public struct MockedRoute {
+public struct MockedRoute: Hashable {
     let path: String
     let statusCode: HTTPStatusCode
     let body: Any?
@@ -23,8 +23,16 @@ public struct MockedRoute {
             forKey: "method",
             from: json
         ) {
-            guard let routerMethod = RouterMethod(rawValue: methodString) else {
-                throw FibsError(reason: .invalidParamType(expected: "String"))
+            guard let routerMethod = RouterMethod(rawValue: methodString.uppercased()),
+                RouterMethod.supportedMethods.contains(routerMethod) else {
+                    let supportedMethodsString = RouterMethod.supportedMethods
+                        .map { $0.rawValue }
+                        .joined(separator: ", ")
+                    throw FibsError(
+                        reason: .invalidParamType(
+                            expected: "one of \(supportedMethodsString)"
+                        )
+                    )
             }
             self.method = routerMethod
         } else {
@@ -48,15 +56,25 @@ public struct MockedRoute {
             from: json
         )
     }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(path)
+        hasher.combine(method.rawValue)
+    }
+    
+    public static func == (lhs: MockedRoute, rhs: MockedRoute) -> Bool {
+        return lhs.path == rhs.path
+        && lhs.method == rhs.method
+    }
 }
 
 private func extractJSON(from data: Data) throws -> [String: Any] {
-    let anyJSON = try JSONSerialization.jsonObject(
+    guard data.count > 0 else { throw FibsError(reason: .emptyBody) }
+    guard let json = try? JSONSerialization.jsonObject(
         with: data,
         options: []
-    )
-    guard let json = anyJSON as? [String: Any] else {
-        throw URLError(.cannotDecodeContentData)
+    ) as? [String: Any] else {
+        throw FibsError(reason: .invalidBodyFormat)
     }
     return json
 }
@@ -93,5 +111,11 @@ private extension FibsError {
             errorDescription: "Error when parsing mocked route.",
             reason: reason
         )
+    }
+}
+
+private extension RouterMethod {
+    static var supportedMethods: [RouterMethod] {
+        return [.get, .post, .put, .delete, .patch]
     }
 }
