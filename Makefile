@@ -4,13 +4,21 @@ APPUNITE-CACHE = ~/appunite-cache
 BINARIES_FOLDER=/usr/local/bin
 TEMPORARY_FOLDER = ./tmp
 SWIFT_BUILD_FLAGS=--configuration release
+EXECUTABLE_FOLDER=$(shell swift build $(SWIFT_BUILD_FLAGS) --show-bin-path)
 
-USE_SWIFT_STATIC_STDLIB:=$(shell test -d $$(dirname $$(xcrun --find swift))/../lib/swift_static/macosx && echo yes)
-ifeq ($(USE_SWIFT_STATIC_STDLIB), yes)
-SWIFT_BUILD_FLAGS+= -Xswiftc -static-stdlib
-endif
+BINARY_NAME=fibs
+LIB_AGENTCORE_DYLIB_NAME=libagentcore.dylib
+LIB_CPUPLUGIN_DYLIB_NAME=libcpuplugin.dylib
+LIB_ENVPLUGIN_DYLIB_NAME=libenvplugin.dylib
+LIB_HCAPLUGIN_DYLIB_NAME=libhcapiplugin.dylib
+LIB_MEMPLUGIN_DYLIB_NAME=libmemplugin.dylib
+BINARY_EXECUTABLE=$(EXECUTABLE_FOLDER)/$(BINARY_NAME)
+LIB_AGENTCORE_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_AGENTCORE_DYLIB_NAME)
+LIB_CPUPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_CPUPLUGIN_DYLIB_NAME)
+LIB_ENVPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)
+LIB_HCAPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)
+LIB_MEMPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)
 
-FIBS_EXECUTABLE=$(shell swift build $(SWIFT_BUILD_FLAGS) --show-bin-path)/fibs
 LICENSE_PATH="$(shell pwd)/LICENSE.md"
 
 bootstrap:    ## Bootstrap Gems and CocoaPods and SPM Dependencies
@@ -33,7 +41,7 @@ gems:	## Bootstrap gems dependencies
 	@bundle install --path vendor/bundle
 
 build-release: ## Build with release configuration
-	@swift build -c release
+	@swift build $(SWIFT_BUILD_FLAGS)
 
 cocoapods-fresh:    ## update repository and then try to instal pods
 	@echo "--- Updating cocoapods repos..."
@@ -53,13 +61,23 @@ store-cache:	## restore cache from aws
 
 install:
 	install -d "$(BINARIES_FOLDER)"
-	install "$(FIBS_EXECUTABLE)" "$(BINARIES_FOLDER)"
+	install "$(BINARY_EXECUTABLE)" "$(BINARIES_FOLDER)"
+	install "$(LIB_AGENTCORE_DYLIB)" "$(BINARIES_FOLDER)"
+	install "$(LIB_HCAPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
+	install "$(LIB_CPUPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
+	install "$(LIB_ENVPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
+	install "$(LIB_MEMPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
 
 zip: install
 	mkdir -p "$(TEMPORARY_FOLDER)/"
-	cp -f "$(BINARIES_FOLDER)/fibs" "$(TEMPORARY_FOLDER)"
+	cp -f "$(BINARIES_FOLDER)/$(BINARY_NAME)" "$(TEMPORARY_FOLDER)"
+	cp -f "$(BINARIES_FOLDER)/$(LIB_AGENTCORE_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
+	cp -f "$(BINARIES_FOLDER)/$(LIB_CPUPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
+	cp -f "$(BINARIES_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
+	cp -f "$(BINARIES_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
+	cp -f "$(BINARIES_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
 	cp -f "$(LICENSE_PATH)" "$(TEMPORARY_FOLDER)"
-	(cd "$(TEMPORARY_FOLDER)"; zip -yr - "fibs" "LICENSE.md") > "./fibs.zip"
+	(cd "$(TEMPORARY_FOLDER)"; zip -yr - "$(BINARY_NAME)" $(LIB_AGENTCORE_DYLIB_NAME) $(LIB_CPUPLUGIN_DYLIB_NAME) $(LIB_CPUPLUGIN_DYLIB_NAME) $(LIB_ENVPLUGIN_DYLIB_NAME) $(LIB_HCAPLUGIN_DYLIB_NAME) $(LIB_MEMPLUGIN_DYLIB_NAME) "LICENSE.md") > "./fibs.zip"
 
 help:    ## This help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
