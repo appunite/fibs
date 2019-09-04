@@ -69,7 +69,7 @@ gems:	## Bootstrap gems dependencies
 	@echo "--- Installing gems..."
 	@bundle install --path vendor/bundle
 
-build-release: ## Build with release configuration
+build-release:  ## Build with release configuration
 	@swift build $(SWIFT_BUILD_FLAGS)
 
 cocoapods-fresh:    ## update repository and then try to instal pods

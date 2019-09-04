@@ -46,4 +46,4 @@ release:
   only:
     - tags
   script:
-    - make restore-cache release-cocoapods store-cache
+    - make restore-cache bootstrap release-cocoapods store-cache
