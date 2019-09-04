@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
   s.license      = { :type => "MIT", :file => "LICENSE.md" }
 
   s.authors      = { "Damian Kolasiński" => "damian.kolasinski@appunite.com", "Szymon Mrozek" => "szymon.mrozek.sm@gmail.com" }
-  s.source       = { :http => "https://git.appunite.com/szymon.mrozek/fibs/releases/download/#{s.version}/fibs-#{s.version}.zip" }
+  s.source       = { :http => "https://git.appunite.com/szymon.mrozek/fibs/releases/download/#{s.version}/fibs.zip" }
 
   s.preserve_paths = '*'
   s.exclude_files = "**/file.zip"

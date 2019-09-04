@@ -17,8 +17,9 @@ stages:
       - ./.build/release/libenvplugin.dylib
       - ./.build/release/libhcapiplugin.dylib
       - ./.build/release/libmemplugin.dylib
+      - ./fibs.zip
   tags:
-    - vm-xcode10.2.1
+    - vm-xcode10.3.0
 
 .release-appunite-job: &release-appunite-job
   <<: *xcode-job
@@ -47,6 +48,6 @@ build:
 release:
   <<: *release-appunite-job
   only:
-    - master
+    - tags
   script:
-    - make restore-cache bootstrap build-release store-cache
+    - make restore-cache bootstrap build-release zip store-cache
