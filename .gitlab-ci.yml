@@ -38,8 +38,6 @@ stages:
 
 build:
   stage: test
-  except:
-    - master
   tags:
     - vm-xcode10.2.1
   script:
