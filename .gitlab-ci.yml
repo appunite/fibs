@@ -33,7 +33,7 @@ stages:
 #     - /^no-test.*$/
 
 build:
-  <<: *xcode-job-template
+  <<: *xcode-job
   stage: test
   except:
     - tags
@@ -41,7 +41,7 @@ build:
     - make restore-cache bootstrap build-release store-cache
 
 release:
-  <<: *xcode-job-template
+  <<: *xcode-job
   stage: release
   only:
     - tags
