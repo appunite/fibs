@@ -50,7 +50,6 @@ release:
     - make restore-cache bootstrap zip generate-podspec store-cache
 
 submit-cocoapods:
-  release:
   <<: *xcode-job
   stage: deploy
   dependencies:
