@@ -21,10 +21,6 @@ stages:
   tags:
     - vm-xcode10.3.0
 
-.release-appunite-job: &release-appunite-job
-  <<: *xcode-job
-  stage: release
-
 # test:
 #   <<: *xcode-job
 #   stage: test
@@ -37,14 +33,16 @@ stages:
 #     - /^no-test.*$/
 
 build:
+  <<: *xcode-job-template
   stage: test
-  tags:
-    - vm-xcode10.2.1
+  except:
+    - tags
   script:
     - make restore-cache bootstrap build-release store-cache
 
 release:
-  <<: *release-appunite-job
+  <<: *xcode-job-template
+  stage: release
   only:
     - tags
   script:
