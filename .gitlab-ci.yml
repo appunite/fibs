@@ -57,4 +57,4 @@ submit-cocoapods:
   only:
     - tags
   script:
-    - make restore-cache bootstrap generate-podspec store-cache
+    - make restore-cache bootstrap release-cocoapods store-cache
