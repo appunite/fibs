@@ -33,7 +33,7 @@ gems:	## Bootstrap gems dependencies
 	@bundle install --path vendor/bundle
 
 build-release: ## Build with release configuration
-	@swift build -c release --disable-sandbox
+	@swift build -c release
 
 cocoapods-fresh:    ## update repository and then try to instal pods
 	@echo "--- Updating cocoapods repos..."
