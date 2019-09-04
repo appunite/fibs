@@ -71,11 +71,11 @@ gems:	## Bootstrap gems dependencies
 
 build-release:  ## Build with release configuration
 	@swift build $(SWIFT_BUILD_FLAGS)
-	@install_name_tool -change $(LIB_AGENTCORE_DYLIB) @rpath/$(LIB_AGENTCORE_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_CPUPLUGIN_DYLIB) @rpath/$(LIB_CPUPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_ENVPLUGIN_DYLIB) @rpath/$(LIB_ENVPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_HCAPLUGIN_DYLIB) @rpath/$(LIB_HCAPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_MEMPLUGIN_DYLIB) @rpath/$(LIB_MEMPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	@install_name_tool -change $(LIB_AGENTCORE_DYLIB) @loader_path/$(LIB_AGENTCORE_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	@install_name_tool -change $(LIB_CPUPLUGIN_DYLIB) @loader_path/$(LIB_CPUPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	@install_name_tool -change $(LIB_ENVPLUGIN_DYLIB) @loader_path/$(LIB_ENVPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	@install_name_tool -change $(LIB_HCAPLUGIN_DYLIB) @loader_path/$(LIB_HCAPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	@install_name_tool -change $(LIB_MEMPLUGIN_DYLIB) @loader_path/$(LIB_MEMPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
 
 cocoapods-fresh:    ## update repository and then try to instal pods
 	@echo "--- Updating cocoapods repos..."
