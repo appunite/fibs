@@ -111,7 +111,7 @@ zip: install	## Zip all binaries into embeded zip file
 generate-podspec:	## Generate podspec file
 	@echo "$$PODSPEC_CONTENTS" > Fibs.podspec.json
 
-release-cocoapods: zip generate-podspec	## Release new version to cocoapods repo
+release-cocoapods:	## Release new version to cocoapods repo
 	@bundle exec pod trunk push
 
 help:    ## This help message

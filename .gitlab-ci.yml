@@ -18,6 +18,7 @@ stages:
       - ./.build/release/libhcapiplugin.dylib
       - ./.build/release/libmemplugin.dylib
       - ./fibs.zip
+      - ./Fibs.podspec.json
   tags:
     - vm-xcode10.3.0
 
@@ -46,4 +47,15 @@ release:
   only:
     - tags
   script:
-    - make restore-cache bootstrap release-cocoapods store-cache
+    - make restore-cache bootstrap zip generate-podspec store-cache
+
+submit-cocoapods:
+  release:
+  <<: *xcode-job
+  stage: deploy
+  dependencies:
+    - release
+  only:
+    - tags
+  script:
+    - make restore-cache bootstrap generate-podspec store-cache
