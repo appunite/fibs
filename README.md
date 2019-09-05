@@ -28,12 +28,11 @@ curl -v\
 where body represents endpoint details.
 All possible attributes that can be mocked are listed below:
 
-```
+
 - `method` - HTTP request method, with possible values of: "GET", "POST", "PUT", "DELETE", "PATCH"
 - `path` - endpoint path that supports regular expression, example: "/content/restaurant/([0-9]$)"
 - `code` - HTTP response status code
 - `body` - HTTP response, can be any value
 - `headers` - HTTP response headers which is json 
-```
 
 ### Execute Shell command
