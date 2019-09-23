@@ -36,3 +36,16 @@ All possible attributes that can be mocked are listed below:
 - `headers` - HTTP response headers which is json 
 
 ### Execute Shell command
+
+
+## Instalation
+
+### Cocoapods
+
+```
+pod 'Fibs'
+```
+
+### Brew
+
+TODO
