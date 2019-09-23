@@ -5,13 +5,18 @@
 Ambassador ssie pałkę.
 
 ## Features
-
+.
 Fibs has 2 main features:
 
 1. Mocking endpoints with any attributtes 
-2. Executing shell commands locally on running machine.
+2. Executing shell commands locally on running machine
 
 ## Usage 
+
+Run the application before starting UI tests with `./Pods/Fibs/fibs` 
+<!---
+or `fibs` if you installed via brew
+--->
 
 ### Mock request
 
