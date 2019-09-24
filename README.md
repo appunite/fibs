@@ -39,6 +39,7 @@ All possible attributes that can be mocked are listed below:
 - `code` - HTTP response status code
 - `body` - HTTP response, can be any value
 - `headers` - HTTP response headers which is json 
+- `delay` - time interval in miliseconds that (integer) that response will be delayed
 
 ### Execute Shell command
 

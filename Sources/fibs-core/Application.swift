@@ -18,7 +18,7 @@ public class Application {
         routesRegistrator: MockedRoutesRegistrator
     ) {
         self.router = router
-        self.routesRegistrator = MockedRoutesRegistratorImp(router: router)
+        self.routesRegistrator = routesRegistrator
     }
     
     public func run() throws {

@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  FibsPackageDescription
+//  fibs
 //
 //  Created by Szymon Mrozek on 24/06/2019.
 //
@@ -10,7 +10,8 @@ import Kitura
 
 let router = Router()
 let routesRegistrator = MockedRoutesRegistratorImp(
-    router: router
+    router: router,
+    dispatcher: DispatcherImp()
 )
 let app = Application(
     router: router,

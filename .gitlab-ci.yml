@@ -20,7 +20,7 @@ stages:
       - ./fibs.zip
       - ./Fibs.podspec.json
   tags:
-    - vm-xcode10.3.0
+    - vm-xcode11.0.0
 
 # test:
 #   <<: *xcode-job
