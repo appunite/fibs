@@ -14,6 +14,7 @@ public struct MockedRoute: Hashable {
     let body: Any?
     let headers: [String: String]?
     let method: RouterMethod
+    let delayInMilis: Int?
     
     init(data: Data) throws {
         let json = try extractJSON(from: data)
@@ -53,6 +54,11 @@ public struct MockedRoute: Hashable {
         self.headers = try extractOptionalParam(
             [String: String].self,
             forKey: "headers",
+            from: json
+        )
+        self.delayInMilis = try extractOptionalParam(
+            Int.self,
+            forKey: "delay",
             from: json
         )
     }

@@ -1,6 +1,6 @@
 //
 //  main.swift
-//  FibsPackageDescription
+//  fibs-core
 //
 //  Created by Szymon Mrozek on 24/06/2019.
 //

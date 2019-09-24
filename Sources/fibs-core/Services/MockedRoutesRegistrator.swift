@@ -6,6 +6,7 @@
 //
 
 import Kitura
+import Foundation
 
 public protocol MockedRoutesRegistrator {
     func register(_ route: MockedRoute)
@@ -14,9 +15,14 @@ public protocol MockedRoutesRegistrator {
 public class MockedRoutesRegistratorImp: MockedRoutesRegistrator {
     private let router: Router
     private var routes: [AnyHashable: MockedRoute] = [:]
+    private let dispatcher: Dispatcher
     
-    public init(router: Router) {
+    public init(
+        router: Router,
+        dispatcher: Dispatcher
+        ) {
         self.router = router
+        self.dispatcher = dispatcher
     }
     
     public func register(_ route: MockedRoute) {
@@ -63,6 +69,16 @@ public class MockedRoutesRegistratorImp: MockedRoutesRegistrator {
         ) -> RouterHandler {
         return { [unowned self] request, response, next in
             let route = self.routes[routeHash]!
+            
+            if let delay = route.delayInMilis {
+                let semaphore = DispatchSemaphore(value: 0)
+                self.dispatcher.dispatch(
+                    afterInterval: .milliseconds(delay),
+                    work: { [semaphore] in semaphore.signal() }
+                )
+                semaphore.wait()
+            }
+            
             response.statusCode = route.statusCode
             route.headers?.forEach {
                 response.headers.append(
