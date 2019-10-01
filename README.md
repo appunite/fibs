@@ -2,10 +2,12 @@
 
 ## Why?
 
-Ambassador ssie pałkę.
+Have you ever tried to mock web server in Xcode UI Tests?
+Fibs is the simplest way to do this - completely separated from Xcode project. 
+It is a server running locally that serves endpoint that allows you mocking other endpoints!
 
 ## Features
-.
+
 Fibs has 2 main features:
 
 1. Mocking endpoints with any attributtes 
@@ -20,7 +22,7 @@ or `fibs` if you installed via brew
 
 ### Mock request
 
-If you would like to mock endpoint you need to hit `localhost:8080/mock` route, example cURL:
+If you would like to mock endpoint you need to hit `localhost:8080/mock` route (from UITest target), example cURL:
 ```bash
 curl -v\
     -X POST\
@@ -43,6 +45,7 @@ All possible attributes that can be mocked are listed below:
 
 ### Execute Shell command
 
+TODO 
 
 ## Instalation
 
