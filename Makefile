@@ -1,6 +1,5 @@
 SHELL := /bin/bash
 SOURCERY = Pods/Sourcery/bin/sourcery
-APPUNITE-CACHE = ~/appunite-cache
 BINARIES_FOLDER=/usr/local/bin
 TEMPORARY_FOLDER = ./tmp
 SWIFT_BUILD_FLAGS=--configuration release
@@ -56,42 +55,34 @@ bootstrap:    ## Bootstrap Gems and CocoaPods and SPM Dependencies
 	@make gems
 
 	@echo "--- Installing pods..."
-	@test -s Pods/ || bundle exec pod install || make cocoapods-fresh
+	test -s Pods/ || bundle exec pod install || make cocoapods-fresh
 
 generate-project:	## Genetate xcode project and bootstrap swift dependencies
 	@echo "--- Resolving swift dependencies..."
-	@swift package resolve
+	swift package resolve
 	@echo "--- Generating xcode project..."
-	@swift package generate-xcodeproj --xcconfig-overrides Sources/Configuration/Common.xcconfig
+	swift package generate-xcodeproj --xcconfig-overrides Sources/Configuration/Common.xcconfig
 
 gems:	## Bootstrap gems dependencies
-	@gem install bundler
+	gem install bundler
 	@echo "--- Installing gems..."
-	@bundle install --path vendor/bundle
+	bundle check --path vendor/bundle || bundle install --jobs=4 --path vendor/bundle --quiet
 
 build-release:  ## Build with release configuration
-	@swift build $(SWIFT_BUILD_FLAGS)
-	@install_name_tool -change $(LIB_AGENTCORE_DYLIB) @loader_path/$(LIB_AGENTCORE_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_CPUPLUGIN_DYLIB) @loader_path/$(LIB_CPUPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_ENVPLUGIN_DYLIB) @loader_path/$(LIB_ENVPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_HCAPLUGIN_DYLIB) @loader_path/$(LIB_HCAPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	@install_name_tool -change $(LIB_MEMPLUGIN_DYLIB) @loader_path/$(LIB_MEMPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	swift build $(SWIFT_BUILD_FLAGS)
+	install_name_tool -change $(LIB_AGENTCORE_DYLIB) @loader_path/$(LIB_AGENTCORE_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	install_name_tool -change $(LIB_CPUPLUGIN_DYLIB) @loader_path/$(LIB_CPUPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	install_name_tool -change $(LIB_ENVPLUGIN_DYLIB) @loader_path/$(LIB_ENVPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	install_name_tool -change $(LIB_HCAPLUGIN_DYLIB) @loader_path/$(LIB_HCAPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
+	install_name_tool -change $(LIB_MEMPLUGIN_DYLIB) @loader_path/$(LIB_MEMPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
 
 cocoapods-fresh:    ## update repository and then try to instal pods
 	@echo "--- Updating cocoapods repos..."
-	@bundle exec pod repo update
-	@bundle exec pod install
+	bundle exec pod repo update
+	bundle exec pod install
 
 sourcery: ## Meta - code generator
-	@$(SOURCERY) --sources Sources/ --templates AutoMockable.stencil --output Tests/ApplicationTests/Mocks/AutoMockable.generated.swift --disableCache
-
-restore-cache:	## store cache in aws
-	@$(APPUNITE-CACHE) restore --keys 'pods-{{ checksum "Podfile.lock" }}'
-	@$(APPUNITE-CACHE) restore --keys 'gems-{{ checksum "Gemfile.lock" }}'
-
-store-cache:	## restore cache from aws
-	@$(APPUNITE-CACHE) store --key 'pods-{{ checksum "Podfile.lock" }}' --paths 'Pods'
-	@$(APPUNITE-CACHE) store --key 'gems-{{ checksum "Gemfile.lock" }}' --paths 'vendor'
+	$(SOURCERY) --sources Sources/ --templates AutoMockable.stencil --output Tests/ApplicationTests/Mocks/AutoMockable.generated.swift --disableCache
 
 install: build-release	## Install binaries in local bin path
 	install -d "$(BINARIES_FOLDER)"
@@ -117,7 +108,7 @@ generate-podspec:	## Generate podspec file
 	@echo "$$PODSPEC_CONTENTS" > Fibs.podspec.json
 
 release-cocoapods:	## Release new version to cocoapods repo
-	@bundle exec pod trunk push
+	bundle exec pod trunk push
 
 help:    ## This help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
