@@ -84,7 +84,7 @@ cocoapods-fresh:    ## update repository and then try to instal pods
 sourcery: ## Meta - code generator
 	$(SOURCERY) --sources Sources/ --templates AutoMockable.stencil --output Tests/ApplicationTests/Mocks/AutoMockable.generated.swift --disableCache
 
-install: build-release	## Install binaries in local bin path
+install: ## Install binaries in local bin path
 	install -d "$(BINARIES_FOLDER)"
 	install "$(BINARY_EXECUTABLE)" "$(BINARIES_FOLDER)"
 	install "$(LIB_AGENTCORE_DYLIB)" "$(BINARIES_FOLDER)"
