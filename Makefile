@@ -64,7 +64,7 @@ generate-project:	## Genetate xcode project and bootstrap swift dependencies
 	swift package generate-xcodeproj --xcconfig-overrides Sources/Configuration/Common.xcconfig
 
 gems:	## Bootstrap gems dependencies
-	gem install bundler
+	gem install bundler -v 2.0.2
 	@echo "--- Installing gems..."
 	bundle check --path vendor/bundle || bundle install --jobs=4 --path vendor/bundle --quiet
 

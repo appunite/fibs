@@ -6,7 +6,26 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+
+      - name: Restore cached pods
+        uses: actions/cache@v1.0.0
+        id: restore-pods
+        with:
+          path: Pods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
+      - name: Restore cached gems
+        uses: actions/cache@v1.0.0
+        id: restore-gems
+        with:
+          path: vendor
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
       - name: Bootstrap
         run: make bootstrap
+        
       - name: Build with release configuration
         run: make build-release
