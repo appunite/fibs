@@ -7,4 +7,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Bootstrap
-        run: make boostrap
+        run: make bootstrap
+      - name: Build with release configuration
+        run: make build-release
