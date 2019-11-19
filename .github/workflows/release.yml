@@ -1,6 +1,8 @@
-name: Build
-#to:do build on push inside pull request or on pull request opening
-on: push
+name: Release
+
+on:
+  push:
+    tags: [0-9]+.[0-9]+.[0-9]+
 
 jobs:
   bootstrap_build:
@@ -40,3 +42,22 @@ jobs:
         with:
           name: fibs_archived
           path: fibs.zip
+  release:
+    name: Release
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v1
+        with:
+          name: fibs_archived
+
+      - name: Generate podspec 
+        run: make GIT_TAG=$GITHUB_REF generate-podspec
+
+      - name: Release on Github
+        uses: ncipollo/release-action@v1
+        with:
+          artifact: fibs.zip
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload to Cocoapods
+        run: make release-cocoapods

@@ -22,17 +22,6 @@ stages:
   tags:
     - vm-xcode11.0.0
 
-# test:
-#   <<: *xcode-job
-#   stage: test
-#   script:
-#     - make restore-cache
-#     - make bootstrap
-#     - swift test
-#     - make store-cache
-#   except:
-#     - /^no-test.*$/
-
 build:
   <<: *xcode-job
   stage: test
@@ -47,7 +36,7 @@ release:
   only:
     - tags
   script:
-    - make restore-cache bootstrap zip generate-podspec store-cache
+    - make restore-cache bootstrap build-release zip generate-podspec store-cache
 
 submit-cocoapods:
   <<: *xcode-job
