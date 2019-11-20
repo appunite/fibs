@@ -1,5 +1,5 @@
 name: Build
-#to:do build on push inside pull request or on pull request opening
+# #to:do build on push inside pull request or on pull request opening
 on: push
 
 jobs:
@@ -7,36 +7,38 @@ jobs:
     name: Bootstrap and Build
     runs-on: macOS-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
+      - name: Echo
+        run: echo Build
+#       - name: Checkout
+#         uses: actions/checkout@v1
+#         with:
+#           fetch-depth: 1
 
-      - name: Restore cached pods
-        uses: actions/cache@v1.0.0
-        id: restore-pods
-        with:
-          path: Pods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+#       - name: Restore cached pods
+#         uses: actions/cache@v1.0.0
+#         id: restore-pods
+#         with:
+#           path: Pods
+#           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
 
-      - name: Restore cached gems
-        uses: actions/cache@v1.0.0
-        id: restore-gems
-        with:
-          path: vendor
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+#       - name: Restore cached gems
+#         uses: actions/cache@v1.0.0
+#         id: restore-gems
+#         with:
+#           path: vendor
+#           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
 
-      - name: Bootstrap
-        run: make bootstrap
+#       - name: Bootstrap
+#         run: make bootstrap
 
-      - name: Build with release configuration
-        run: make build-release
+#       - name: Build with release configuration
+#         run: make build-release
 
-      - name: Zip the output
-        run: make zip
+#       - name: Zip the output
+#         run: make zip
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: fibs_archived
-          path: fibs.zip
+#       - name: Upload artifacts
+#         uses: actions/upload-artifact@v1
+#         with:
+#           name: fibs_archived
+#           path: fibs.zip
