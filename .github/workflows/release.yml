@@ -45,6 +45,7 @@ jobs:
   release:
     name: Release
     runs-on: macOS-latest
+    needs: [bootstrap_build]
     steps:
       - name: Download artifacts
         uses: actions/download-artifact@v1
