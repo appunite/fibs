@@ -78,4 +78,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to Cocoapods
+        env:
+          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
         run: make release-cocoapods
