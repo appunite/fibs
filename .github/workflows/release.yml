@@ -57,6 +57,17 @@ jobs:
         with:
           name: fibs_archived
 
+      - name: Restore cached gems
+        uses: actions/cache@v1.0.0
+        id: restore-gems
+        with:
+          path: vendor
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+
+      - name: Make gems
+        if: steps.restore-gems.outputs.cache-hit != 'true'
+        run: make gems
+
       - name: Generate podspec 
         run: make GIT_TAG=$GITHUB_REF generate-podspec
 
