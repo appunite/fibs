@@ -71,14 +71,14 @@ jobs:
       - name: Generate podspec 
         run: make GIT_TAG=$GITHUB_REF generate-podspec
 
-      - name: Release on Github
-        uses: ncipollo/release-action@v1
-        with:
-          artifact: "fibs.zip"
-          artifactContentType: application/zip
-          token: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Release on Github
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifact: "fibs.zip"
+      #     artifactContentType: application/zip
+      #     token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Upload to Cocoapods
-        env:
-          COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-        run: make release-cocoapods
+      # - name: Upload to Cocoapods
+      #   env:
+      #     COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+      #   run: make release-cocoapods
