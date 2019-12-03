@@ -74,7 +74,8 @@ jobs:
       - name: Release on Github
         uses: ncipollo/release-action@v1
         with:
-          artifact: fibs.zip
+          artifact: "fibs.zip"
+          artifactContentType: application/zip
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload to Cocoapods
