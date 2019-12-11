@@ -15,18 +15,22 @@ jobs:
           fetch-depth: 1
 
       - name: Restore cached pods
-        uses: actions/cache@v1.0.0
+        uses: actions/cache@v1
         id: restore-pods
         with:
           path: Pods
           key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-pods-
 
       - name: Restore cached gems
-        uses: actions/cache@v1.0.0
+        uses: actions/cache@v1
         id: restore-gems
         with:
           path: vendor
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
 
       - name: Bootstrap
         run: make bootstrap
@@ -38,6 +42,12 @@ jobs:
         run: make zip
 
       - name: Upload artifacts
+        uses: actions/upload-artifact@v1
+        with:
+          name: fibs.zip
+          path: fibs.zip
+
+      - name: test dupa
         uses: actions/upload-artifact@v1
         with:
           name: fibs.zip
@@ -63,7 +73,9 @@ jobs:
         with:
           path: vendor
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-
+          restore-keys: |
+            ${{ runner.os }}-gems-
+            
       - name: Make gems
         if: steps.restore-gems.outputs.cache-hit != 'true'
         run: make gems
