@@ -32,26 +32,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
-      # - name: Bootstrap
-      #   run: make bootstrap
+      - name: Bootstrap
+        run: make bootstrap
 
-      # - name: Build with release configuration
-      #   run: make build-release
+      - name: Build with release configuration
+        run: make build-release
 
       # - name: Zip the output
       #   run: make zip
 
-      # - name: Upload artifacts
-      #   uses: actions/upload-artifact@v1
-      #   with:
-      #     name: fibs.zip
-      #     path: fibs.zip
-
-      - name: test dupa
+      - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: LICENSE
-          path: LICENSE.md
+          name: archived
+          path: tmp
   release:
     name: Release
     runs-on: macOS-latest
@@ -65,7 +59,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v1
         with:
-          name: fibs.zip
+          name: archived
 
       - name: Restore cached gems
         uses: actions/cache@v1.0.0
@@ -86,7 +80,7 @@ jobs:
       - name: Release on Github
         uses: softprops/action-gh-release@v1
         with:
-          files: fibs.zip
+          files: archived
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
