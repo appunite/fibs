@@ -40,7 +40,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
-          name: fibs_archived
+          name: fibs.zip
           path: fibs.zip
   release:
     name: Release
@@ -55,7 +55,7 @@ jobs:
       - name: Download artifacts
         uses: actions/download-artifact@v1
         with:
-          name: fibs_archived
+          name: fibs.zip
 
       - name: Restore cached gems
         uses: actions/cache@v1.0.0
