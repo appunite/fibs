@@ -30,7 +30,7 @@ jobs:
         with:
           path: vendor
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-        restore-keys: |
+          restore-keys: |
             ${{ runner.os }}-gems-
 
       - name: Bootstrap

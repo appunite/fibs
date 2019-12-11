@@ -50,8 +50,8 @@ jobs:
       - name: test dupa
         uses: actions/upload-artifact@v1
         with:
-          name: fibs.zip
-          path: fibs.zip
+          name: LICENSE
+          path: LICENSE.md
   release:
     name: Release
     runs-on: macOS-latest
