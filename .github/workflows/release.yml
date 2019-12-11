@@ -32,20 +32,20 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
-      - name: Bootstrap
-        run: make bootstrap
+      # - name: Bootstrap
+      #   run: make bootstrap
 
-      - name: Build with release configuration
-        run: make build-release
+      # - name: Build with release configuration
+      #   run: make build-release
 
-      - name: Zip the output
-        run: make zip
+      # - name: Zip the output
+      #   run: make zip
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v1
-        with:
-          name: fibs.zip
-          path: fibs.zip
+      # - name: Upload artifacts
+      #   uses: actions/upload-artifact@v1
+      #   with:
+      #     name: fibs.zip
+      #     path: fibs.zip
 
       - name: test dupa
         uses: actions/upload-artifact@v1
