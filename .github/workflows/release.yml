@@ -41,11 +41,23 @@ jobs:
       - name: Zip the output
         run: make zip
 
+      - name: print directory
+        run: ls ./tmp
+        
       - name: Upload artifacts
         uses: actions/upload-artifact@v1
         with:
           name: archived
-          path: tmp
+          path: ./tmp
+
+      - run: mkdir -p path/to/artifact
+
+      - run: echo hello > path/to/artifact/world.txt
+
+      - uses: actions/upload-artifact@v1
+        with:
+          name: my-artifact
+          path: path/to/artifact
   release:
     name: Release
     runs-on: macOS-latest
