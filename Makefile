@@ -35,8 +35,7 @@ define PODSPEC_CONTENTS
     "Szymon Mrozek": "szymon.mrozek.sm@gmail.com"
   },
   "source": {
-    "git": "https://github.com/appunite/fibs",
-    "tag": "$(GIT_CURRENT_TAG)"
+	"http": "https://github.com/appunite/fibs/releases/download/$(GIT_CURRENT_TAG)/fibs.zip"
   },
   "preserve_paths": "*",
   "exclude_files": "**/file.zip",
