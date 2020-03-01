@@ -55,7 +55,7 @@ bootstrap:    ## Bootstrap Gems and CocoaPods and SPM Dependencies
 	@make gems
 
 	@echo "--- Installing pods..."
-	test -s Pods/ || bundle exec pod install || make cocoapods-fresh
+	bundle exec pod check || bundle exec pod install || make cocoapods-fresh
 
 generate-project:	## Genetate xcode project and bootstrap swift dependencies
 	@echo "--- Resolving swift dependencies..."

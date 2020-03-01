@@ -5,12 +5,12 @@ DEPENDENCIES:
   - Sourcery
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - Sourcery
 
 SPEC CHECKSUMS:
   Sourcery: 16779170d35ee204666843b09031f36721a84bcc
 
-PODFILE CHECKSUM: 3f3ecd8ec0323d0aa65f90f36885e22a1ca60817
+PODFILE CHECKSUM: d6433b4b26ddd39a1665bf22d46ea7f21e9150e1
 
-COCOAPODS: 1.7.2
+COCOAPODS: 1.9.0
