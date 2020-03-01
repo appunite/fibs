@@ -17,11 +17,12 @@ LIB_ENVPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)
 LIB_HCAPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)
 LIB_MEMPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)
 LICENSE_PATH="$(shell pwd)/LICENSE.md"
+GIT_CURRENT_TAG="$(shell git describe --abbrev=0 --tags)"
 
 define PODSPEC_CONTENTS
 {
   "name": "Fibs",
-  "version": "$(GIT_TAG)",
+  "version": "$(GIT_CURRENT_TAG)",
   "summary": "Mock endpoints & execute commands",
   "description": "Library for mocking network traffic and executing shell commands locally from running app.",
   "homepage": "https://github.com/appunite/fibs",
@@ -35,7 +36,7 @@ define PODSPEC_CONTENTS
   },
   "source": {
     "git": "https://github.com/appunite/fibs",
-    "tag": "$(GIT_TAG)"
+    "tag": "$(GIT_CURRENT_TAG)"
   },
   "preserve_paths": "*",
   "exclude_files": "**/file.zip",
