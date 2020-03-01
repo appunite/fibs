@@ -6,13 +6,11 @@ on:
 
 jobs:
   bootstrap_build:
-    name: Bootstrap and Build
+    name: Build and release
     runs-on: macOS-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
 
       - name: Restore cached pods
         uses: actions/cache@v1
@@ -50,43 +48,30 @@ jobs:
           name: archived
           path: ./tmp
 
-  release:
-    name: Release
-    runs-on: macOS-latest
-    needs: [bootstrap_build]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-        with:
-          fetch-depth: 1
-          
-      - name: Download artifacts
-        uses: actions/download-artifact@v1
-        with:
-          name: archived
-
-      - name: Restore cached gems
-        uses: actions/cache@v1.0.0
-        id: restore-gems
-        with:
-          path: vendor
-          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-gems-
-            
-      - name: Make gems
-        if: steps.restore-gems.outputs.cache-hit != 'true'
-        run: make gems
-
       - name: Generate podspec 
         run: make generate-podspec
 
-      - name: Release on Github
-        uses: softprops/action-gh-release@v1
-        with:
-          files: archived
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./fibs.zip
+          asset_name: fibs.zip
+          asset_content_type: application/zip
 
       - name: Upload to Cocoapods
         env:

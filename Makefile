@@ -17,7 +17,7 @@ LIB_ENVPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)
 LIB_HCAPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)
 LIB_MEMPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)
 LICENSE_PATH="$(shell pwd)/LICENSE.md"
-GIT_CURRENT_TAG="$(shell git describe --abbrev=0 --tags)"
+GIT_CURRENT_TAG=$(shell git describe --abbrev=0 --tags)
 
 define PODSPEC_CONTENTS
 {
@@ -67,7 +67,7 @@ generate-project:	## Genetate xcode project and bootstrap swift dependencies
 gems:	## Bootstrap gems dependencies
 	gem install bundler -v 2.0.2
 	@echo "--- Installing gems..."
-	bundle check --path vendor/bundle || bundle install --jobs=4 --path vendor/bundle --quiet
+	bundle check || bundle install
 
 build-release:  ## Build with release configuration
 	swift build $(SWIFT_BUILD_FLAGS)
