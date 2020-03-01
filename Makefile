@@ -17,7 +17,6 @@ LIB_ENVPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)
 LIB_HCAPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)
 LIB_MEMPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)
 LICENSE_PATH="$(shell pwd)/LICENSE.md"
-GIT_TAG=$(shell git describe --tags --abbrev=0)
 
 define PODSPEC_CONTENTS
 {
@@ -25,7 +24,7 @@ define PODSPEC_CONTENTS
   "version": "$(GIT_TAG)",
   "summary": "Mock endpoints & execute commands",
   "description": "Library for mocking network traffic and executing shell commands locally from running app.",
-  "homepage": "https://git.appunite.com/szymon.mrozek/fibs",
+  "homepage": "https://github.com/appunite/fibs",
   "license": {
     "type": "MIT",
     "file": "LICENSE.md"
@@ -35,7 +34,8 @@ define PODSPEC_CONTENTS
     "Szymon Mrozek": "szymon.mrozek.sm@gmail.com"
   },
   "source": {
-    "http": "https://git.appunite.com/szymon.mrozek/fibs/-/jobs/$(CI_JOB_ID)/artifacts/raw/fibs.zip"
+    "git": "https://github.com/appunite/fibs",
+    "tag": "$(GIT_TAG)"
   },
   "preserve_paths": "*",
   "exclude_files": "**/file.zip",
@@ -64,7 +64,7 @@ generate-project:	## Genetate xcode project and bootstrap swift dependencies
 	swift package generate-xcodeproj --xcconfig-overrides Sources/Configuration/Common.xcconfig
 
 gems:	## Bootstrap gems dependencies
-	gem install bundler
+	gem install bundler -v 2.0.2
 	@echo "--- Installing gems..."
 	bundle check --path vendor/bundle || bundle install --jobs=4 --path vendor/bundle --quiet
 
@@ -84,7 +84,7 @@ cocoapods-fresh:    ## update repository and then try to instal pods
 sourcery: ## Meta - code generator
 	$(SOURCERY) --sources Sources/ --templates AutoMockable.stencil --output Tests/ApplicationTests/Mocks/AutoMockable.generated.swift --disableCache
 
-install: build-release	## Install binaries in local bin path
+install: ## Install binaries in local bin path
 	install -d "$(BINARIES_FOLDER)"
 	install "$(BINARY_EXECUTABLE)" "$(BINARIES_FOLDER)"
 	install "$(LIB_AGENTCORE_DYLIB)" "$(BINARIES_FOLDER)"
