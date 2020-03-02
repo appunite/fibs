@@ -5,17 +5,7 @@ TEMPORARY_FOLDER = ./tmp
 SWIFT_BUILD_FLAGS=--configuration release
 EXECUTABLE_FOLDER=$(shell swift build $(SWIFT_BUILD_FLAGS) --show-bin-path)
 BINARY_NAME=fibs
-LIB_AGENTCORE_DYLIB_NAME=libagentcore.dylib
-LIB_CPUPLUGIN_DYLIB_NAME=libcpuplugin.dylib
-LIB_ENVPLUGIN_DYLIB_NAME=libenvplugin.dylib
-LIB_HCAPLUGIN_DYLIB_NAME=libhcapiplugin.dylib
-LIB_MEMPLUGIN_DYLIB_NAME=libmemplugin.dylib
 BINARY_EXECUTABLE=$(EXECUTABLE_FOLDER)/$(BINARY_NAME)
-LIB_AGENTCORE_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_AGENTCORE_DYLIB_NAME)
-LIB_CPUPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_CPUPLUGIN_DYLIB_NAME)
-LIB_ENVPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)
-LIB_HCAPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)
-LIB_MEMPLUGIN_DYLIB=$(EXECUTABLE_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)
 LICENSE_PATH="$(shell pwd)/LICENSE.md"
 GIT_CURRENT_TAG=$(shell git describe --abbrev=0 --tags)
 
@@ -70,11 +60,6 @@ gems:	## Bootstrap gems dependencies
 
 build-release:  ## Build with release configuration
 	swift build $(SWIFT_BUILD_FLAGS)
-	install_name_tool -change $(LIB_AGENTCORE_DYLIB) @loader_path/$(LIB_AGENTCORE_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	install_name_tool -change $(LIB_CPUPLUGIN_DYLIB) @loader_path/$(LIB_CPUPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	install_name_tool -change $(LIB_ENVPLUGIN_DYLIB) @loader_path/$(LIB_ENVPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	install_name_tool -change $(LIB_HCAPLUGIN_DYLIB) @loader_path/$(LIB_HCAPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
-	install_name_tool -change $(LIB_MEMPLUGIN_DYLIB) @loader_path/$(LIB_MEMPLUGIN_DYLIB_NAME) $(BINARY_EXECUTABLE)
 
 cocoapods-fresh:    ## update repository and then try to instal pods
 	@echo "--- Updating cocoapods repos..."
@@ -87,22 +72,12 @@ sourcery: ## Meta - code generator
 install: ## Install binaries in local bin path
 	install -d "$(BINARIES_FOLDER)"
 	install "$(BINARY_EXECUTABLE)" "$(BINARIES_FOLDER)"
-	install "$(LIB_AGENTCORE_DYLIB)" "$(BINARIES_FOLDER)"
-	install "$(LIB_HCAPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
-	install "$(LIB_CPUPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
-	install "$(LIB_ENVPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
-	install "$(LIB_MEMPLUGIN_DYLIB)" "$(BINARIES_FOLDER)"
 
 zip: install	## Zip all binaries into embeded zip file
 	mkdir -p "$(TEMPORARY_FOLDER)/"
 	cp -f "$(BINARIES_FOLDER)/$(BINARY_NAME)" "$(TEMPORARY_FOLDER)"
-	cp -f "$(BINARIES_FOLDER)/$(LIB_AGENTCORE_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
-	cp -f "$(BINARIES_FOLDER)/$(LIB_CPUPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
-	cp -f "$(BINARIES_FOLDER)/$(LIB_ENVPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
-	cp -f "$(BINARIES_FOLDER)/$(LIB_HCAPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
-	cp -f "$(BINARIES_FOLDER)/$(LIB_MEMPLUGIN_DYLIB_NAME)" "$(TEMPORARY_FOLDER)"
 	cp -f "$(LICENSE_PATH)" "$(TEMPORARY_FOLDER)"
-	(cd "$(TEMPORARY_FOLDER)"; zip -yr - "$(BINARY_NAME)" $(LIB_AGENTCORE_DYLIB_NAME) $(LIB_CPUPLUGIN_DYLIB_NAME) $(LIB_CPUPLUGIN_DYLIB_NAME) $(LIB_ENVPLUGIN_DYLIB_NAME) $(LIB_HCAPLUGIN_DYLIB_NAME) $(LIB_MEMPLUGIN_DYLIB_NAME) "LICENSE.md") > "./$(BINARY_NAME).zip"
+	(cd "$(TEMPORARY_FOLDER)"; zip -yr - "$(BINARY_NAME)" "LICENSE.md") > "./$(BINARY_NAME).zip"
 
 generate-podspec:	## Generate podspec file
 	@echo "$$PODSPEC_CONTENTS" > Fibs.podspec.json
