@@ -71,6 +71,7 @@ sourcery: ## Meta - code generator
 
 install: ## Install binaries in local bin path
 	install -d "$(BINARIES_FOLDER)"
+	install "$(BINARY_EXECUTABLE)" "$(BINARIES_FOLDER)"
 
 zip: install	## Zip all binaries into embeded zip file
 	mkdir -p "$(TEMPORARY_FOLDER)/"
