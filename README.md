@@ -45,7 +45,25 @@ All possible attributes that can be mocked are listed below:
 
 ### Execute Shell command
 
-TODO 
+Fibs gives you also ability to run any shell command on macOS from UI test target. 
+This could be useful for running special mocking scripts that modifies your tested system.
+To run shell command hit `localhost:8080/command`, example cURL: 
+```bash
+curl -v\
+    -X POST\
+    -H "Content-Type: application/json"\
+    -H "Accept: application/json"\
+    -d "{ \"command\": \"echo 'Hello World'\"}"\
+    "localhost:8080/command"
+```
+Parameters of such call are:
+- `command` - raw string command that you want to run on hosting system
+
+Also, response for this request is synchronous, which means you can later process it back in UITests target. 
+For the request above, the response would be:
+```bash
+{"raw_response":"Hello World"}
+```
 
 ## Instalation
 
