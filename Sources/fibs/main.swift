@@ -15,7 +15,8 @@ let routesRegistrator = MockedRoutesRegistratorImp(
 )
 let app = Application(
     router: router,
-    routesRegistrator: routesRegistrator
+    routesRegistrator: routesRegistrator,
+    commandLineExecutor: CommandLineExecutorImp()
 )
 
 do {
